@@ -1,68 +1,93 @@
+# YouTube Search App
 
-# Mobile App Development 2
-# Assignment 2: 🎥 YouTube Video Search App
-An Android application to search for YouTube videos using **YouTube Data API v3**.  
-The user enters a search query, and the app displays a list of videos with title, channel, publish date, description, and thumbnail.
+A lightweight Android application built with Java that searches YouTube videos using the YouTube Data API v3 and displays the results in a clean, scrollable interface.
 
----
+## Features
 
-## 📱 Features
-- Search for videos via YouTube API.  
-- Display results in a **RecyclerView** with CardView design.  
-- Load thumbnails using **Glide** with placeholder.  
-- Open videos directly in YouTube when clicking on an item.  
-- Handle common errors (no internet, empty input, no results).  
-- Lightweight and easy-to-use UI.  
+- Search YouTube videos by keyword.
+- Display results in a RecyclerView using CardView-based items.
+- Show video title, channel, publish date, description, and thumbnail.
+- Load thumbnails with Glide and a fallback placeholder.
+- Open a selected video directly in YouTube.
+- Handle empty input, missing internet connection, no-result states, and API errors.
 
----
+## Tech Stack
 
-## 🛠️ Tools & Technologies
-- **RecyclerView** for lists  
-- **CardView** for item design  
-- **Glide** for image loading  
-- **AsyncTask** for background tasks (educational purposes, deprecated in modern apps)  
-- **HttpURLConnection** for network requests  
+- Java
+- Android SDK
+- RecyclerView
+- CardView
+- Glide
+- HttpURLConnection
+- YouTube Data API v3
+- Gradle
 
----
+## Requirements
 
-## 📂 Project Structure
-```
+- JDK 21 recommended for the current Gradle setup
+- Android SDK Platform 36
+- Android SDK Build Tools
+- A YouTube Data API v3 key
 
- ├── MainActivity.java       # Main activity (UI + search logic)
- ├── NetworkUtils.java       # Build URLs and perform HTTP requests
- ├── VideoItem.java          # Data model (video info)
- ├── VideoAdapter.java       # RecyclerView Adapter to display videos
-```
+## Setup
 
-```
- ├── activity_main.xml       # Main screen UI
- ├── item_video.xml          # Video card layout
-```
+1. Clone the repository:
 
----
+   ```bash
+   git clone https://github.com/Mohamed-Issam-1/YouTubeSearchApp.git
+   cd YouTubeSearchApp
+   ```
 
-## 🚀 How to Run
-1. Clone or download the project and open it in **Android Studio**.  
-2. Add your YouTube API key to the project-root `local.properties` file:
+2. Create a `local.properties` file in the project root. You can use `local.properties.example` as a reference.
+
+3. Add your Android SDK path and YouTube API key:
+
    ```properties
+   sdk.dir=C:/Users/YourName/AppData/Local/Android/Sdk
    YOUTUBE_API_KEY=YOUR_API_KEY
    ```
-   A placeholder is provided in `local.properties.example`.
 
-   Keep the real key out of Git and restrict it to the required Android app and YouTube Data API in Google Cloud.
+4. Keep `local.properties` out of version control. Restrict the API key in Google Cloud to the required Android application and the YouTube Data API v3.
 
-   > Get or manage API credentials from [Google Cloud Console](https://console.cloud.google.com/).  
-3. Run the app on an emulator or real device.  
-4. Enter a search query and see results instantly!  
+5. Build the debug APK:
 
----
+   ```powershell
+   .\gradlew.bat clean assembleDebug
+   ```
 
-## ⚠️ Notes
-- Ensure you have an active internet connection.  
-- API keys have quota limits; exceeding them may cause API errors.  
+6. The generated APK will be available at:
 
----
+   ```text
+   app/build/outputs/apk/debug/app-debug.apk
+   ```
 
-## 👨‍💻 Developer
-- Mohamed Issam Qesht
-- Instructor: Ibrahim O.Kaware
+## Project Structure
+
+```text
+app/src/main/
+|-- java/com/example/youtubesearchapp/
+|   |-- MainActivity.java
+|   |-- NetworkUtils.java
+|   |-- VideoAdapter.java
+|   `-- VideoItem.java
+|
+`-- res/
+    |-- layout/
+    |   |-- activity_main.xml
+    |   `-- item_video.xml
+    `-- drawable/
+```
+
+## Security
+
+The YouTube API key is read from the local `local.properties` file and is not stored in the Git repository.
+
+API keys embedded in Android applications can still be extracted from the built APK, so Google Cloud restrictions should always be configured for the key.
+
+## Technical Note
+
+The current implementation retains `AsyncTask` from the original Java implementation. `AsyncTask` is deprecated in modern Android development; a future refactor could replace it with a more current background-execution approach.
+
+## Status
+
+Completed.
