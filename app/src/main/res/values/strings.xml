@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">YouTube Search</string>
+    <string name="app_instructions">Enter a query to search YouTube videos</string>
+    <string name="hint_search">Search…</string>
+    <string name="btn_search">Search</string>
+    <string name="empty_hint">Type a keyword then press Search</string>
+    <string name="loading">Loading...</string>
+    <string name="no_network">Please check your network connection and try again.</string>
+    <string name="no_search_term">Please enter a search term</string>
+    <string name="no_results">No results found</string>
+</resources>
