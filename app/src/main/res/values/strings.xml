@@ -1,9 +1,16 @@
 <resources>
     <string name="app_name">YouTube Search</string>
-    <string name="app_instructions">Enter a query to search YouTube videos</string>
-    <string name="hint_search">Search…</string>
+    <string name="app_title">YouTube Search</string>
+    <string name="app_instructions">Find videos by topic with a clean and focused search experience.</string>
+    <string name="demo_mode_message">DEMO MODE - local sample results</string>
+    <string name="hint_search">Search videos...</string>
     <string name="btn_search">Search</string>
-    <string name="empty_hint">Type a keyword then press Search</string>
+    <string name="empty_hint">Search for Android, tutorials, music, or any topic you want to explore.</string>
+    <string name="quick_searches">Quick searches</string>
+    <string name="suggestion_android">Android Development</string>
+    <string name="suggestion_ai">Artificial Intelligence</string>
+    <string name="suggestion_music">Music</string>
+    <string name="suggestion_web">Web Development</string>
     <string name="loading">Loading...</string>
     <string name="no_network">Please check your network connection and try again.</string>
     <string name="no_search_term">Please enter a search term</string>

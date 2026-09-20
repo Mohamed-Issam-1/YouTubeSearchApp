@@ -23,58 +23,105 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VH> {
 
     public void setData(List<VideoItem> items){
         data.clear();
-        if (items != null) data.addAll(items);
+        if (items != null) {
+            data.addAll(items);
+        }
         notifyDataSetChanged();
     }
 
-    @Override public long getItemId(int position) {
-        String vid = data.get(position).getVideoId();
-        return vid == null ? position : vid.hashCode();
+    @Override
+    public long getItemId(int position) {
+        String videoId = data.get(position).getVideoId();
+        return videoId == null || videoId.isEmpty()
+                ? position
+                : videoId.hashCode();
     }
 
-    @NonNull @Override
+    @NonNull
+    @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_video, parent, false);
-        return new VH(v);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_video, parent, false);
+        return new VH(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VH h, int pos){
-        VideoItem it = data.get(pos);
-        h.title.setText(it.getTitle());
-        h.channel.setText(it.getChannelTitle());
-        h.desc.setText(it.getDescription());
-        String published = it.getPublishedAt();
-        if (published != null && published.length() >= 10) h.publishedAt.setText(published.substring(0,10));
-        else h.publishedAt.setText(published != null ? published : "");
-        Glide.with(h.thumb.getContext())
-                .load(it.getThumbnailUrl())
-                .placeholder(R.drawable.ic_image_placeholder)
-                .error(R.drawable.ic_image_placeholder)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(h.thumb);
-        h.thumb.setContentDescription(it.getTitle());
-        h.itemView.setOnClickListener(v -> {
-            String vid = it.getVideoId();
-            if (vid != null && !vid.isEmpty()) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + vid));
-                v.getContext().startActivity(i);
-            }
-        });
+    public void onBindViewHolder(@NonNull VH holder, int position){
+        VideoItem item = data.get(position);
+
+        holder.title.setText(item.getTitle());
+        holder.channel.setText(item.getChannelTitle());
+        holder.description.setText(item.getDescription());
+
+        String publishedAt = item.getPublishedAt();
+        if (publishedAt != null && publishedAt.length() >= 10) {
+            holder.publishedAt.setText(publishedAt.substring(0, 10));
+        } else {
+            holder.publishedAt.setText(
+                    publishedAt != null ? publishedAt : ""
+            );
+        }
+
+        /*
+         * Demo thumbnails are Android drawable resources, not network URLs.
+         * Set them directly on the ImageView instead of sending them through
+         * Glide. Glide remains responsible only for real YouTube thumbnail URLs.
+         */
+        if (item.getThumbnailResId() != 0) {
+            Glide.with(holder.thumbnail.getContext()).clear(holder.thumbnail);
+            holder.thumbnail.setImageResource(item.getThumbnailResId());
+
+        } else if (item.getThumbnailUrl() != null
+                && !item.getThumbnailUrl().trim().isEmpty()) {
+
+            Glide.with(holder.thumbnail.getContext())
+                    .load(item.getThumbnailUrl())
+                    .placeholder(R.drawable.ic_image_placeholder)
+                    .error(R.drawable.ic_image_placeholder)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(holder.thumbnail);
+
+        } else {
+            Glide.with(holder.thumbnail.getContext()).clear(holder.thumbnail);
+            holder.thumbnail.setImageResource(R.drawable.ic_image_placeholder);
+        }
+
+        holder.thumbnail.setContentDescription(item.getTitle());
+
+        String videoId = item.getVideoId();
+        boolean hasLiveVideo = videoId != null && !videoId.isEmpty();
+
+        holder.itemView.setClickable(hasLiveVideo);
+        holder.itemView.setFocusable(hasLiveVideo);
+
+        holder.itemView.setOnClickListener(hasLiveVideo ? view -> {
+            Intent intent = new Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://www.youtube.com/watch?v=" + videoId)
+            );
+            view.getContext().startActivity(intent);
+        } : null);
     }
 
-    @Override public int getItemCount(){ return data.size(); }
+    @Override
+    public int getItemCount(){
+        return data.size();
+    }
 
-    static class VH extends RecyclerView.ViewHolder{
-        ImageView thumb;
-        TextView title, channel, publishedAt, desc;
-        VH(@NonNull View v){
-            super(v);
-            thumb = v.findViewById(R.id.thumb);
-            title = v.findViewById(R.id.title);
-            channel = v.findViewById(R.id.channel);
-            publishedAt = v.findViewById(R.id.publishedAt);
-            desc = v.findViewById(R.id.desc);
+    static class VH extends RecyclerView.ViewHolder {
+        ImageView thumbnail;
+        TextView title;
+        TextView channel;
+        TextView publishedAt;
+        TextView description;
+
+        VH(@NonNull View view){
+            super(view);
+            thumbnail = view.findViewById(R.id.thumb);
+            title = view.findViewById(R.id.title);
+            channel = view.findViewById(R.id.channel);
+            publishedAt = view.findViewById(R.id.publishedAt);
+            description = view.findViewById(R.id.desc);
         }
     }
 }
